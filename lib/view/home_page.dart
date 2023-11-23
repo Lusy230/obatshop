@@ -33,20 +33,36 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigasi ke halaman LogInPage
-                  Navigator.pushNamed(context, '/logIn');
-                },
-                child: Text('Register'),
-              ),
-              SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  // Navigasi ke halaman SignInPage
-                  Navigator.pushNamed(context, '/signIn');
-                },
-                child: Text('Login'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigasi ke halaman LogInPage
+                      Navigator.pushNamed(context, '/logIn');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white, // Warna latar belakang tombol
+                    ),
+                    child: Text(
+                      'Register',
+                      style: TextStyle(color: Colors.black), // Warna teks tombol
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Navigasi ke halaman SignInPage
+                      Navigator.pushNamed(context, '/signIn');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white, // Warna latar belakang tombol
+                    ),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(color: Colors.black), // Warna teks tombol
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

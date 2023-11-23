@@ -1,7 +1,6 @@
 import 'package:apotek/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class LogInPage extends StatefulWidget {
   @override
@@ -9,18 +8,19 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
-final AuthController _authController = Get.put(AuthController());
+  final AuthController _authController = Get.put(AuthController());
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-void dispose() {
-_emailController.dispose();
-_passwordController.dispose();
-super.dispose();
-}
+  bool _isPasswordHidden = true;
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   void _showEmptyFieldDialog(BuildContext context) {
     showDialog(
@@ -56,6 +56,7 @@ super.dispose();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 90, 49, 26), // Warna #F3B664
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -64,7 +65,8 @@ super.dispose();
         ),
         title: Text('Register'),
       ),
-      body: Padding(
+      body: Container(
+        color: Color.fromARGB(255, 122, 82, 46), // Warna #F1EB90
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,44 +77,46 @@ super.dispose();
             ),
             TextFormField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
-              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordHidden
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordHidden = !_isPasswordHidden;
+                    });
+                  },
+                ),
+              ),
+              obscureText: _isPasswordHidden,
             ),
             SizedBox(height: 20),
-
             Obx(() {
-  return ElevatedButton(
-    onPressed: _authController.isLoading.value
-    ? null
-    : () {
-      _authController.registerUser(
-        _emailController.text,
-        _passwordController.text,
-        );
-         _navigateToDashboard(context);
-},
-child: _authController.isLoading.value
-? CircularProgressIndicator()
-: Text('Register'),
-);
-
-}),
-],
-),
-),
-);
+              return ElevatedButton(
+                onPressed: _authController.isLoading.value
+                    ? null
+                    : () {
+                        _authController.registerUser(
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                        _navigateToDashboard(context);
+                      },
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 90, 49, 26), // Warna #9FBB73
+                ),
+                child: _authController.isLoading.value
+                    ? CircularProgressIndicator()
+                    : Text('Register'),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
 }
-}
-//             ElevatedButton(
-//               onPressed: () {
-//                 _navigateToDashboard(context);
-//               },
-//               child: Text('Log In'),
-
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
