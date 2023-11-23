@@ -107,7 +107,7 @@ class _LogInPageState extends State<LogInPage> {
                         _navigateToDashboard(context);
                       },
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 90, 49, 26), // Warna #9FBB73
+                  primary: Color(0xFF9fbb73), // Warna #9FBB73
                 ),
                 child: _authController.isLoading.value
                     ? CircularProgressIndicator()
