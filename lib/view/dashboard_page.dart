@@ -125,7 +125,7 @@ class _DashboardPageState extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () { 
                     Navigator.pushNamed(context, '/pembelian');
                   },
                   child: Column(
