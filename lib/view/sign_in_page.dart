@@ -1,16 +1,40 @@
+// sign_in_page.dart
 import 'package:flutter/material.dart';
 import 'package:apotek/controller/auth_controller.dart';
-import 'package:get/get_rx/src/rx_workers/rx_workers.dart';
+import 'package:get/get.dart';
 import 'dashboard_page.dart';
 
 class SignInPage extends StatelessWidget {
-  final AuthController _authController = AuthController();
+  final AuthController _authController = Get.put(AuthController());
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  void _showEmptyFieldDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Email and password cannot be empty.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Log In'),
+        title: Text('LogIn'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -18,34 +42,50 @@ class SignInPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
+              controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
             TextFormField(
+              controller: _passwordController,
               decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Assuming the user registration logic is handled in AuthController
-                _authController.loginUser(
-                  'example@gmail.com', // Replace with the actual email
-                  'password123', // Replace with the actual password
-                );
 
-                // Navigate to the DashboardPage upon successful registration
-                ever(_authController.isLoading, (bool isLoading) {
-                  if (!isLoading && _authController.isLoggedIn.value) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => DashboardPage()),
-                    );
-                  }
-                });
-              },
-              child: Text('Login'),
-            ),
+            Obx(() {
+              return ElevatedButton(
+                onPressed: _authController.isLoading.value
+                    ? null
+                    : () async {
+                        if (_emailController.text.isEmpty ||
+                            _passwordController.text.isEmpty) {
+                          _showEmptyFieldDialog(context);
+                        } else {
+                          await _authController.loginUser(
+                            _emailController.text,
+                            _passwordController.text,
+                          );
+
+                          // Use ever to observe changes in isLoading and isLoggedIn
+                          ever(_authController.isLoading, (bool isLoading) {
+                            if (!isLoading &&
+                                _authController.isLoggedIn.value) {
+                              // Navigate to DashboardPage upon successful login
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DashboardPage(),
+                                ),
+                              );
+                            }
+                          });
+                        }
+                      },
+                child: _authController.isLoading.value
+                    ? CircularProgressIndicator()
+                    : Text('LogIn'),
+              );
+            }),
           ],
         ),
       ),
