@@ -1,5 +1,5 @@
 import 'package:apotek/firebase_options.dart';
-import 'package:apotek/models/pembelian_model.dart';
+// import 'package:apotek/models/pembelian_model.dart';
 import 'package:apotek/view/akun_page.dart';
 import 'package:apotek/view/dashboard_page.dart';
 import 'package:apotek/view/histori_page.dart';
@@ -14,6 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+//sss
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ void main() async {
   );
   await Get.putAsync(() async => await SharedPreferences.getInstance());
   await FirebaseMessagingHandler().initPushNotification();
+  await FirebaseMessagingHandler().initLocalNotification();
   runApp(MyApp());
 }
 
